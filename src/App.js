@@ -10,11 +10,13 @@ const App = () => {
   const [currentNumber, setCurrentNumber] = useState('0');
   const [firstNumber, setFirstNumber] = useState('0');
   const [operation, setOperation] = useState('');
+  const [dot, setDot] = useState(false);
 
   const handleOnClear = () => {
     setCurrentNumber('0')
     setFirstNumber('0')
     setOperation('')
+    setDot(false)
   };
 
   const handleAddNumber = (num) => {
@@ -49,6 +51,41 @@ const App = () => {
 
   }
 
+  const handleMultiNumbers = () => {
+
+    if(firstNumber === '0'){
+        setFirstNumber(String(currentNumber));
+        setCurrentNumber('0')
+        setOperation('*')
+    }else {
+      const sum = Number(firstNumber) * Number(currentNumber);
+      setCurrentNumber(String(sum))
+      setOperation('')
+    }
+
+  }
+
+  const handleDivNumbers = () => {
+
+    if(firstNumber === '0'){
+        setFirstNumber(String(currentNumber));
+        setCurrentNumber('0')
+        setOperation('/')
+    }else {
+      const sum = Number(firstNumber) / Number(currentNumber);
+      setCurrentNumber(String(sum))
+      setOperation('')
+    }
+
+  }
+
+  const handleDot = () => {
+    if(dot === false) {
+      setCurrentNumber(prev => `${prev === '0' ? '' : prev}${'.'}`)
+      setDot(true);
+    }
+  }
+
   const handleEquals = () => {
 
     if(firstNumber !== '0' && operation !== '' && currentNumber !== '0'){
@@ -58,6 +95,12 @@ const App = () => {
             break;
           case '-':
             handleMinusNumbers();
+            break;
+          case '*': 
+            handleMultiNumbers(); 
+            break;
+          case '/':
+            handleDivNumbers();
             break;
           default: 
             break;
@@ -71,10 +114,10 @@ const App = () => {
       <Content>
         <Input value={currentNumber}/>
         <Row>
-          <Button label="x"/>
-          <Button label="/"/>
+          <Button label="x" onClick={handleMultiNumbers}/>
+          <Button label="/" onClick={handleDivNumbers}/>
           <Button label="c" onClick={handleOnClear}/>
-          <Button label="."/>
+          <Button label="." onClick={handleDot}/>
         </Row>
         <Row>
           <Button label="7" onClick={() => handleAddNumber('7')}/>
@@ -94,6 +137,9 @@ const App = () => {
           <Button label="3" onClick={() => handleAddNumber('3')}/>
           <Button label="=" onClick={handleEquals}/>
         </Row>
+        <Row>
+          <Button label="0" onClick={() => handleAddNumber('0')}/>
+          </Row>
       </Content>
     </Container>
   );
